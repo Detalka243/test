@@ -1,5 +1,12 @@
 #include <iostream>
-void rmMtx(int ** mtx, const size_t m);
+void rmMtx(int ** mtx, const size_t m)
+{
+  for (size_t i = 0; i < m; ++i) 
+  {
+    delete [] mtx[i];
+  }
+  delete [] mtx;
+} 
 void printMtx();
 int ** makeMtx(const size_t m, const size_t n)
 {
@@ -24,6 +31,11 @@ int main()
   size_t m = 0;
   size_t n = 0;
   std::cin >> m >> n;
+  
+  if ((!std::cin) || m == 0 || n == 0)
+  {
+    return 1;
+  }
 
   int **mtx = nullptr;
 
@@ -31,6 +43,12 @@ int main()
   {
     std::cin >> mtx[i % m][i / m];
   }
+  if (std::cin.fail()) 
+  {
+    rmMtx(mtx, m);
+    return 1;
+  }
   
 
+  rmMtx(mtx, m);
 }
