@@ -1,4 +1,5 @@
 #include <iostream>
+
 void rmMtx(int ** mtx, const size_t m)
 {
   for (size_t i = 0; i < m; ++i) 
@@ -7,7 +8,24 @@ void rmMtx(int ** mtx, const size_t m)
   }
   delete [] mtx;
 } 
-void printMtx();
+void printMtx(const size_t m, const size_t n)
+{
+  std::cout << mtx[0][0];
+  for (size_t i = 1; i < n; ++i)
+  {
+    std::cout << "_" << mtx[0][i];
+  }
+
+  for (size_t i = 1; i < m; ++i)
+  {
+    std::cout << "\n" << mtx[i][0];
+    for (size_t j = 1; j < n; ++j)
+    {
+      std::cout << "_" << mtx[i][j];
+    }
+  }
+  std::cout << "\n";
+}
 int ** makeMtx(const size_t m, const size_t n)
 {
   int **mtxR = new int *[m];
@@ -38,6 +56,16 @@ int main()
   }
 
   int **mtx = nullptr;
+  
+  try
+  {
+    mtx = makeMtx(m, n);
+  }
+  catch (...)
+  {
+    return 2;
+  }
+
 
   for (size_t i = 0; i < m * n; ++i)
   {
@@ -48,7 +76,8 @@ int main()
     rmMtx(mtx, m);
     return 1;
   }
+  std::cout << "\n";
+  printMtx(m, n);
   
-
   rmMtx(mtx, m);
 }
