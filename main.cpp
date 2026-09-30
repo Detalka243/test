@@ -42,7 +42,18 @@ int ** makeMtx(const size_t m, const size_t n)
   }
   return mtxR;
 }
-int ** transpose();
+int ** transpose(int ** mtx, const size_t m, const size_t n)
+{
+  int ** mtxNew = makeMtx(mtx, m, n);
+  for (size_t i = 0; i < m; ++i)
+  {
+    for (size_t j = 0; j < n; ++j)
+    {
+      mtxNew[i][j] = mtx[j][i];
+    }
+  }
+  return mtxNew;
+}
 
 int main()
 {
@@ -76,8 +87,22 @@ int main()
     rmMtx(mtx, m);
     return 1;
   }
+
+  int ** mtxNew = nullptr;
+  try 
+  {
+    mtxNew = transpose(mtx, n, m);
+  }
+  catch (...) 
+  {
+    return 2;
+  }
+
   std::cout << "\n";
   printMtx(m, n);
-  
+  std::cout << "\n";
+  printMtx(mtxNew, n, m);
   rmMtx(mtx, m);
+  rmMtx(mtxNew, n);
+
 }
