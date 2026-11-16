@@ -78,16 +78,16 @@ Mtx3d::Mtx3d():
   k(1),
   mtx(nullptr)
 {
-  mtx = new int** [n]{};
-    try
-    {
-      mtx[0] = new int* [m]{};
-      mtx[0][0] = new int [k]{};
-      mtx[0][0][0] = 0;
-    } catch (...) {
-      clearMtx();
-      throw;
-    }
+  try
+  {
+    mtx = new int** [n]{};
+    mtx[0] = new int* [m]{};
+    mtx[0][0] = new int [k]{};
+    mtx[0][0][0] = 0;
+  } catch (...) {
+    clearMtx();
+    throw;
+  }
 }
 Mtx3d::Mtx3d(const Mtx3d & rhs):
   n(rhs.n),
@@ -138,7 +138,7 @@ Mtx3d::Mtx3d(size_t n, size_t m, size_t k, int fill):
     }
   } catch (...) {
     clearMtx();
-    throw std::bad_alloc();
+    throw;
   }
 }
 Mtx3d::Mtx3d(Mtx3d && rhs) noexcept:
@@ -154,24 +154,17 @@ Mtx3d::Mtx3d(Mtx3d && rhs) noexcept:
 }
 Mtx3d & Mtx3d::operator=(const Mtx3d & rhs)
 {
-  if (this == &rhs)
-  {
-    return *this;
-  }
   Mtx3d temp(rhs);
   std::swap(n, temp.n);
   std::swap(m, temp.m);
   std::swap(k, temp.k);
   std::swap(mtx, temp.mtx);
-
   return *this;
 }
 Mtx3d & Mtx3d::operator=(Mtx3d && rhs) noexcept
 {
   if (this != &rhs)
   {
-    this->clearMtx();
-
     std::swap(n, rhs.n);
     std::swap(m, rhs.m);
     std::swap(k, rhs.k);
@@ -313,8 +306,8 @@ Mtx3d Mtx3d::eraseZ(size_t l, size_t r)
           continue;
         }
         res[i][j][index] = mtx[i][j][p];
+        index++;
       }
-      index++;
     }
   }
   return res;
@@ -415,7 +408,8 @@ Mtx3d Mtx3d::insertY(const Mtx3d & Mtx, size_t id)
 Mtx3d Mtx3d::insertZ(const Mtx3d & Mtx, size_t id)
 {
   if (id > k || Mtx.getM() != m || Mtx.getN() != n ||
-      Mtx.getK() > std::numeric_limits<size_t>::max() - k) {
+      Mtx.getK() > std::numeric_limits<size_t>::max() - k)
+  {
     throw std::logic_error("");
   }
   Mtx3d res(n, m, k + Mtx.getK());
